@@ -5,9 +5,17 @@ export default async function handler(request: VercelRequest, response: VercelRe
   console.log('Roblox proxy function invoked.');
 
   // Set CORS headers for all responses
-  response.setHeader('Access-Control-Allow-Origin', 'https://just-about-me.vercel.app');
+  const allowedOrigins = [
+    'https://just-about-me.vercel.app',
+    'http://localhost:8080',
+    'http://localhost:3000'
+  ];
+  const origin = request.headers.origin;
+  if (allowedOrigins.includes(origin || '')) {
+    response.setHeader('Access-Control-Allow-Origin', origin || allowedOrigins[0]);
+  }
   response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  response.setHeader('Access-Control-Allow-Headers', 'X-CSRF-TOKEN, Content-Type, Authorization');
+  response.setHeader('Access-Control-Allow-Headers', 'X-CSRF-TOKEN, Content-Type, Authorization, x-csrf-token');
   response.setHeader('Access-Control-Allow-Credentials', 'true');
 
   // Handle preflight OPTIONS request
@@ -78,6 +86,11 @@ export default async function handler(request: VercelRequest, response: VercelRe
         headersToForward['user-agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'; // Generic user agent
     }
 
+    // Add Accept header if not present
+    if (!headersToForward['accept']) {
+        headersToForward['accept'] = 'application/json, text/plain, */*';
+    }
+
     // Only include body for POST/PUT requests if request.body exists
     const requestBody = (request.method === 'POST' || request.method === 'PUT') && request.body
       ? JSON.stringify(request.body)
@@ -90,6 +103,14 @@ export default async function handler(request: VercelRequest, response: VercelRe
       console.log('Request Body (to Roblox):', requestBody);
     }
 
+    // Add timeout to prevent hanging requests
+    const timeoutId = setTimeout(() => {
+      console.error(`Request timeout for ${fullRobloxUrl}`);
+      if (!response.headersSent) {
+        response.status(504).json({ error: 'Request timeout while proxying Roblox API request.' });
+      }
+    }, 30000); // 30 second timeout
+
     const robloxResponse = await fetch(fullRobloxUrl, {
       method: request.method,
       headers: headersToForward,
@@ -100,6 +121,9 @@ export default async function handler(request: VercelRequest, response: VercelRe
     // Log incoming response details from Roblox
     console.log(`Received response from Roblox API for ${fullRobloxUrl}: Status ${robloxResponse.status} ${robloxResponse.statusText}`);
     console.log('Response Headers from Roblox:', Object.fromEntries(robloxResponse.headers.entries()));
+
+    // Clear timeout on successful response
+    clearTimeout(timeoutId);
 
     // Forward Roblox's status code
     response.status(robloxResponse.status);
@@ -141,9 +165,16 @@ export default async function handler(request: VercelRequest, response: VercelRe
 
   } catch (error) {
     console.error(`Unhandled error in proxy for ${fullRobloxUrl}:`, error);
+
     // If an error occurs before we can get a status from Roblox, default to 500
     if (!response.headersSent) {
-      response.status(500).json({ error: 'Internal server error while proxying Roblox API request.', details: (error as Error).message });
+      response.status(500).json({
+        error: 'Internal server error while proxying Roblox API request.',
+        details: (error as Error).message,
+        url: fullRobloxUrl,
+        service: service,
+        robloxPath: robloxPath
+      });
     }
   }
 }

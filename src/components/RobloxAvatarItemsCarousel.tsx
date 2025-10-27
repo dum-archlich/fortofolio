@@ -87,6 +87,7 @@ const RobloxAvatarItemsCarousel: React.FC<RobloxAvatarItemsCarouselProps> = ({
         // --- Step 0: Fetch X-CSRF-TOKEN using a dummy POST request ---
         let csrfToken = "";
         try {
+          console.log("Attempting to fetch CSRF token...");
           const csrfResponse = await fetch(
             isProduction
               ? `${proxyApiBase}?service=catalog&robloxPath=v1/catalog/items/details`
@@ -101,9 +102,11 @@ const RobloxAvatarItemsCarousel: React.FC<RobloxAvatarItemsCarouselProps> = ({
             }
           );
 
+          console.log(`CSRF response status: ${csrfResponse.status}`);
           const token = csrfResponse.headers.get("x-csrf-token");
           if (token) {
             csrfToken = token;
+            console.log("CSRF token obtained successfully");
           } else {
             console.warn(
               "X-CSRF-TOKEN not found in response headers from dummy POST to catalog endpoint."
@@ -111,6 +114,7 @@ const RobloxAvatarItemsCarousel: React.FC<RobloxAvatarItemsCarouselProps> = ({
           }
         } catch (csrfErr) {
           console.error("Error fetching CSRF token:", csrfErr);
+          // Continue without CSRF token - some endpoints might not require it
         }
 
         // Step 1: Get item IDs currently wearing
@@ -120,8 +124,9 @@ const RobloxAvatarItemsCarousel: React.FC<RobloxAvatarItemsCarouselProps> = ({
             : `${proxyApiBase}/v1/users/${userId}/currently-wearing`
         );
         if (!wearingResponse.ok) {
+          console.error(`Failed to fetch currently wearing items: ${wearingResponse.status} ${wearingResponse.statusText}`);
           throw new Error(
-            `Failed to fetch currently wearing items: ${wearingResponse.statusText}`
+            `Failed to fetch currently wearing items: ${wearingResponse.statusText} (${wearingResponse.status})`
           );
         }
         const wearingData = await wearingResponse.json();
@@ -134,6 +139,7 @@ const RobloxAvatarItemsCarousel: React.FC<RobloxAvatarItemsCarouselProps> = ({
         }
 
         // Step 2: Fetch item names from catalog API (requires CSRF token)
+        console.log(`Fetching catalog details for ${assetIds.length} items...`);
         const catalogResponse = await fetch(
           isProduction
             ? `${proxyApiBase}?service=catalog&robloxPath=v1/catalog/items/details`
@@ -143,7 +149,7 @@ const RobloxAvatarItemsCarousel: React.FC<RobloxAvatarItemsCarouselProps> = ({
             headers: {
               "Content-Type": "application/json",
               Accept: "application/json",
-              "X-CSRF-TOKEN": csrfToken, // Use the fetched CSRF token
+              ...(csrfToken && { "X-CSRF-TOKEN": csrfToken }), // Only include if token exists
             },
             body: JSON.stringify({
               items: assetIds.map((id) => ({ itemType: "Asset", id: id })),
@@ -152,13 +158,15 @@ const RobloxAvatarItemsCarousel: React.FC<RobloxAvatarItemsCarouselProps> = ({
         );
 
         if (!catalogResponse.ok) {
+          console.error(`Catalog API failed: ${catalogResponse.status} ${catalogResponse.statusText}`);
           const errorBody = await catalogResponse
-            .json()
-            .catch(() => ({ message: catalogResponse.statusText }));
+            .text()
+            .catch(() => catalogResponse.statusText);
+          console.error('Catalog API error body:', errorBody);
           throw new Error(
             `Failed to fetch catalog item details for names: ${
-              errorBody.message || catalogResponse.statusText
-            }`
+              catalogResponse.statusText
+            } (${catalogResponse.status})`
           );
         }
         const catalogData = await catalogResponse.json();
