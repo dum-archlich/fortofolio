@@ -3,6 +3,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+// Data sertifikat dikelompokkan berdasarkan penyedia
 const certificateGroups = {
   dicoding: [
     {
@@ -52,6 +53,7 @@ const certificateGroups = {
 };
 
 const CertificateSection = () => {
+  // Fungsi untuk merender daftar sertifikat atau pesan kosong jika tidak ada
   const renderCertificates = (certs: typeof certificateGroups.dicoding) => {
     if (certs.length === 0) {
       return (
@@ -64,9 +66,7 @@ const CertificateSection = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {certs.map((certificate) => (
           <div key={certificate.id} className="relative w-full min-h-[450px]">
-            {/* Elemen "bayangan" */}
             <div className="absolute top-2 left-2 w-full h-full bg-background rounded-none border-4 border-portfolio-black"></div>
-            {/* Kartu sertifikat yang sebenarnya */}
             <Card
               className="absolute top-0 left-0 w-full h-full border-4 border-portfolio-black rounded-none overflow-hidden bg-portfolio-teal
                          transition-transform duration-100 ease-out transform hover:translate-x-2 hover:translate-y-2 shadow-none"

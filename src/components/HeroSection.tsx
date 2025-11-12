@@ -3,10 +3,9 @@ import { Button } from "@/components/ui/button";
 import FavoriteSongSection from "@/components/FavoriteSongSection"; // Import FavoriteSongSection
 
 const HeroSection = () => {
+  // Komponen bagian hero yang menampilkan foto profil, nama, dan deskripsi singkat
   return (
     <section className="w-full bg-background py-16 md:py-20 lg:py-24">
-      {" "}
-      {/* Diubah dari bg-white */}
       <div className="container mx-auto px-4">
         <div className="relative bg-portfolio-teal border-4 border-portfolio-black rounded-none p-8 md:p-12 lg:p-16 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col items-center text-center">
           {/* Top Left Pink Circles */}
@@ -30,7 +29,7 @@ const HeroSection = () => {
 
           {/* Profile Image */}
           <img
-            src="/kauruko-waguri.jpeg" // Mengganti dengan URL foto profil Anda
+            src="/kauruko-waguri.jpeg"
             alt="Foto Profil Kauruko Waguri"
             className="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-portfolio-black mb-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
           />

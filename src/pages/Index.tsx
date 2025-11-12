@@ -13,10 +13,11 @@ import { useEffect } from "react"; // Import useEffect
 import { ThemeProvider } from "@/components/ThemeProvider"; // Import ThemeProvider
 
 const Index = () => {
+  // Inisialisasi AOS untuk animasi scroll
   useEffect(() => {
     AOS.init({
       duration: 1000, // Durasi animasi dalam ms
-      once:false, // Animasi hanya berjalan sekali saat elemen masuk tampilan
+      once: false, // Animasi berjalan setiap kali elemen masuk tampilan
     });
   }, []);
 
