@@ -21,28 +21,28 @@ const socialLinks = [
     svgPath: "/instagram-167.svg",
     url: "https://www.instagram.com/mkdmibrhm_",
     bgColor: "bg-instagram-purple", // Menggunakan warna kustom dari tailwind.config.ts
-    textColor: "text-white", // Teks putih untuk latar belakang gelap
+    textColor: "text-white",
   },
   {
     name: "Reddit",
     svgPath: "/reddit.svg",
     url: "https://www.reddit.com/user/Difficult_Lie_8919/",
-    bgColor: "bg-reddit-orange", // Menggunakan warna kustom dari tailwind.config.ts
-    textColor: "text-white", // Teks putih untuk latar belakang gelap
+    bgColor: "bg-reddit-orange",
+    textColor: "text-white",
   },
   {
     name: "WhatsApp",
     svgPath: "/whatsapp.svg",
     url: "https://wa.me/+6285932576797",
-    bgColor: "bg-whatsapp-green", // Menggunakan warna kustom dari tailwind.config.ts
-    textColor: "text-white", // Teks putih untuk latar belakang gelap
+    bgColor: "bg-whatsapp-green",
+    textColor: "text-white", 
   },
   {
     name: "Threads",
     svgPath: "/threads.svg",
     url: "https://www.threads.com/@mkdmibrhm_",
-    bgColor: "bg-threads-black", // Menggunakan warna kustom dari tailwind.config.ts
-    textColor: "text-white", // Teks putih untuk latar belakang gelap
+    bgColor: "bg-threads-black",
+    textColor: "text-white", 
   },
 ];
 
@@ -50,7 +50,6 @@ const SocialMediaSection = () => {
   return (
     <section className="w-full bg-background py-16 md:py-20 lg:py-24">
       {" "}
-      {/* Diubah dari bg-white */}
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-portfolio-black mb-12">
           Connect With Me
@@ -59,8 +58,6 @@ const SocialMediaSection = () => {
           {socialLinks.map((link) => (
             <div key={link.name} className="relative w-36 h-36">
               {" "}
-              {/* Container untuk efek 3D */}
-              {/* Elemen "bayangan" - ini adalah lapisan belakang putih dengan border hitam */}
               <div className="absolute top-2 left-2 w-full h-full bg-background rounded-none border-4 border-portfolio-black"></div>{" "}
               {/* Diubah dari bg-white */}
               {/* Kartu media sosial yang sebenarnya - ini akan bergerak saat di-hover */}
