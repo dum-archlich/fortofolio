@@ -49,19 +49,19 @@ const CertificateSection = () => {
                 onClick={() => navigate(platform.path)}
               >
                 <CardHeader className="p-6">
-                  <CardTitle className="text-2xl font-bold text-foreground mb-2">
+                  <CardTitle className="text-2xl font-bold text-white mb-2">
                     {platform.name}
                   </CardTitle>
-                  <p className="text-foreground/80 mb-4">
+                  <p className="text-white/90 mb-4">
                     {platform.description}
                   </p>
                 </CardHeader>
                 <CardContent className="p-6 pt-0">
                   <div className="flex items-center justify-between">
-                    <span className="text-lg font-semibold text-foreground">
+                    <span className="text-lg font-semibold text-white">
                       {platform.count} Sertifikat
                     </span>
-                    <span className="text-sm text-foreground/60">
+                    <span className="text-sm text-white/70">
                       Klik untuk melihat
                     </span>
                   </div>
