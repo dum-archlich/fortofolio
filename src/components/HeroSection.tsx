@@ -30,8 +30,8 @@ const HeroSection = () => {
 
           {/* Profile Image */}
           <img
-            src="/profile.jpg" // Mengganti dengan URL foto profil Anda
-            alt="Foto Profil Makdum Ibrohim"
+            src="/kauruko-waguri.jpeg" // Mengganti dengan URL foto profil Anda
+            alt="Foto Profil Kauruko Waguri"
             className="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-portfolio-black mb-8 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
           />
           {/* Name */}
