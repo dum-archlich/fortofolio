@@ -38,7 +38,8 @@ const certificateGroups = {
       link: "https://raw.githubusercontent.com/dum-archlich/fortofolio/main/public/sertifikat_memulai_pemrograman_dart.png",
     },
   ],
-  hacktiv8: [
+  hacktiv8: [],
+  imphnen: [
     {
       id: 2,
       title: "Sertifikat Kompetensi Kemalasan",
@@ -51,55 +52,64 @@ const certificateGroups = {
 };
 
 const CertificateSection = () => {
-  const renderCertificates = (certs: typeof certificateGroups.dicoding) => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {certs.map((certificate) => (
-        <div key={certificate.id} className="relative w-full min-h-[450px]">
-          {/* Elemen "bayangan" */}
-          <div className="absolute top-2 left-2 w-full h-full bg-background rounded-none border-4 border-portfolio-black"></div>
-          {/* Kartu sertifikat yang sebenarnya */}
-          <Card
-            className="absolute top-0 left-0 w-full h-full border-4 border-portfolio-black rounded-none overflow-hidden bg-portfolio-teal
-                       transition-transform duration-100 ease-out transform hover:translate-x-2 hover:translate-y-2 shadow-none"
-          >
-            <CardHeader className="p-0">
-              <AspectRatio ratio={16 / 9}>
-                {certificate.image ? (
-                  <img
-                    src={certificate.image}
-                    alt={certificate.title}
-                    className="object-cover w-full h-full border-b-4 border-portfolio-black"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full bg-gray-200 text-gray-500 text-xl font-semibold border-b-4 border-portfolio-black">
-                    Certificate Placeholder {certificate.id}
-                  </div>
-                )}
-              </AspectRatio>
-            </CardHeader>
-            <CardContent className="p-6">
-              <CardTitle className="text-xl font-bold text-card-text-dark-mode mb-2">
-                {certificate.title}
-              </CardTitle>
-              <p className="text-card-text-dark-mode mb-4">
-                {certificate.description}
-              </p>
-              {certificate.link && (
-                <a
-                  href={certificate.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-portfolio-purple-link hover:underline font-semibold"
-                >
-                  View Certificate
-                </a>
-              )}
-            </CardContent>
-          </Card>
+  const renderCertificates = (certs: typeof certificateGroups.dicoding) => {
+    if (certs.length === 0) {
+      return (
+        <div className="text-center py-12">
+          <p className="text-lg text-gray-600">Belum ada sertifikat dari provider ini</p>
         </div>
-      ))}
-    </div>
-  );
+      );
+    }
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {certs.map((certificate) => (
+          <div key={certificate.id} className="relative w-full min-h-[450px]">
+            {/* Elemen "bayangan" */}
+            <div className="absolute top-2 left-2 w-full h-full bg-background rounded-none border-4 border-portfolio-black"></div>
+            {/* Kartu sertifikat yang sebenarnya */}
+            <Card
+              className="absolute top-0 left-0 w-full h-full border-4 border-portfolio-black rounded-none overflow-hidden bg-portfolio-teal
+                         transition-transform duration-100 ease-out transform hover:translate-x-2 hover:translate-y-2 shadow-none"
+            >
+              <CardHeader className="p-0">
+                <AspectRatio ratio={16 / 9}>
+                  {certificate.image ? (
+                    <img
+                      src={certificate.image}
+                      alt={certificate.title}
+                      className="object-cover w-full h-full border-b-4 border-portfolio-black"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-full bg-gray-200 text-gray-500 text-xl font-semibold border-b-4 border-portfolio-black">
+                      Certificate Placeholder {certificate.id}
+                    </div>
+                  )}
+                </AspectRatio>
+              </CardHeader>
+              <CardContent className="p-6">
+                <CardTitle className="text-xl font-bold text-card-text-dark-mode mb-2">
+                  {certificate.title}
+                </CardTitle>
+                <p className="text-card-text-dark-mode mb-4">
+                  {certificate.description}
+                </p>
+                {certificate.link && (
+                  <a
+                    href={certificate.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-portfolio-purple-link hover:underline font-semibold"
+                  >
+                    View Certificate
+                  </a>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <section className="w-full bg-background py-16 md:py-20 lg:py-24">
@@ -108,15 +118,19 @@ const CertificateSection = () => {
           My Certificates
         </h2>
         <Tabs defaultValue="dicoding" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-8">
+          <TabsList className="grid w-full grid-cols-3 mb-8">
             <TabsTrigger value="dicoding">Dicoding</TabsTrigger>
             <TabsTrigger value="hacktiv8">Hacktiv8</TabsTrigger>
+            <TabsTrigger value="imphnen">IMPHNEN</TabsTrigger>
           </TabsList>
           <TabsContent value="dicoding">
             {renderCertificates(certificateGroups.dicoding)}
           </TabsContent>
           <TabsContent value="hacktiv8">
             {renderCertificates(certificateGroups.hacktiv8)}
+          </TabsContent>
+          <TabsContent value="imphnen">
+            {renderCertificates(certificateGroups.imphnen)}
           </TabsContent>
         </Tabs>
       </div>
