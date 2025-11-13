@@ -29,7 +29,7 @@ const techStack = [
 ];
 
 const TechStackSection = () => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, dragFree: true });
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [canScrollPrev, setCanScrollPrev] = React.useState(false);
   const [canScrollNext, setCanScrollNext] = React.useState(false);
 
