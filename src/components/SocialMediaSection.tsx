@@ -5,7 +5,7 @@ const socialLinks = [
   {
     name: "GitHub",
     icon: Github,
-    url: "https://github.com/dum-archlich",
+    url: "https://github.com/MakdumIbrohim",
     bgColor: "bg-github-black", // Menggunakan warna kustom dari tailwind.config.ts
     textColor: "text-white", // Teks putih untuk latar belakang gelap
   },
